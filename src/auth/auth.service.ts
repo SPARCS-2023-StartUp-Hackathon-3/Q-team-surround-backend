@@ -5,10 +5,22 @@ import { CreateUserResponseDto } from '../user/dto/user-response.dto';
 import { UserService } from '../user/user.service';
 import { SignupRequestDto } from './dtos/auth-request.dto';
 import * as argon from 'argon2';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { EXPIRATION } from '../common/consts/token.const';
+import { TokenType } from './types/token.enum';
+import * as URL from 'url';
+import { CookieOptions } from './types/cookie-option.interface';
+import { AuthRepository } from './auth.repository';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+    private readonly authRepository: AuthRepository,
+  ) {}
 
   async signup(signupRequestDto: SignupRequestDto) {
     try {
@@ -29,5 +41,39 @@ export class AuthService {
       }
       throw new BadRequestException(INVALID_REQUEST);
     }
+  }
+
+  issueAccessToken(userId: number): string {
+    return this.jwtService.sign(
+      { userId },
+      { secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'), expiresIn: EXPIRATION.ACCESS_TOKEN * 1000 },
+    );
+  }
+
+  issueRefreshToken(userId: number): string {
+    return this.jwtService.sign(
+      { userId },
+      {
+        secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
+        expiresIn: EXPIRATION.REFRESH_TOKEN * 1000,
+      },
+    );
+  }
+
+  async setRefreshToken(userId: number, refreshToken: string) {
+    await this.authRepository.setRefreshToken(userId, refreshToken);
+  }
+
+  getCookieOptions(tokenType: TokenType): CookieOptions {
+    const maxAge = tokenType === 'Access_token' ? EXPIRATION.ACCESS_TOKEN : EXPIRATION.REFRESH_TOKEN;
+
+    const domain = URL.parse(this.configService.get('CLIENT_URI')).host;
+
+    return {
+      httpOnly: true,
+      maxAge,
+      domain,
+      secure: true,
+    };
   }
 }
