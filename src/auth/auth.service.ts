@@ -22,7 +22,7 @@ export class AuthService {
     private readonly authRepository: AuthRepository,
   ) {}
 
-  async signup(signupRequestDto: SignupRequestDto) {
+  async signup(signupRequestDto: SignupRequestDto): Promise<CreateUserResponseDto> {
     try {
       const { email, nickname, password } = signupRequestDto;
       const hashedPassword: string = await argon.hash(password);
