@@ -5,5 +5,8 @@ export class SignupRequestDto {
   email: string;
 
   @IsString()
+  nickname: string;
+
+  @IsString()
   password: string;
 }
