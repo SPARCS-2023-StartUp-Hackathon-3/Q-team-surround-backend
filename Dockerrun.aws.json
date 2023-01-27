@@ -1,0 +1,12 @@
+{
+  "AWSEBDockerrunVersion": "1",
+  "Image": {
+    "Name": "156401130715.dkr.ecr.ap-northeast-2.amazonaws.com/surround",
+    "Update": "true"
+  },
+  "Ports": [
+    {
+      "ContainerPort": 3000
+    }
+  ]
+}

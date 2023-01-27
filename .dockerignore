@@ -1,0 +1,15 @@
+# Versioning and metadata
+.git
+.github
+.gitignore
+.husky
+
+# Build dependencies
+node_modules
+npm-debug.log
+dist
+
+# Misc
+.eslintrc.js
+.prettierrc
+README.md
