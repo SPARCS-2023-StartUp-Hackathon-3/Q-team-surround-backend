@@ -13,8 +13,9 @@ datasource db {
 model User {
   id Int @default(autoincrement()) @id
   email String @db.VarChar(50) @unique
-  password String? @db.Text
   nickname String @db.VarChar(12)
+  password String? @db.Text
+  provider Provider
   createdAt DateTime @db.Timestamptz() @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -26,7 +27,6 @@ model User {
 }
 
 model UserInfo {
-  provider Provider
   userType UserType @default(value: LISTENER) @map("user_type")
   phoneNumber String? @db.VarChar(11) @map("phone_number")
   imageUrl String? @db.Text @map("image_url")

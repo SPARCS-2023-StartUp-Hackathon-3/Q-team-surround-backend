@@ -36,6 +36,7 @@ export class AuthService {
 
       return newUser;
     } catch (error) {
+      console.log(error);
       if (error instanceof PrismaClientKnownRequestError) {
         throw new BadRequestException(ALREADY_EXISTS_USER);
       }
