@@ -8,11 +8,12 @@ COPY package*.json ./
 
 COPY yarn.lock .
 RUN yarn install --immutable --immutable-cache --check-cache
+RUN yarn prisma db push
+RUN yarn prisma generate
+
 COPY . .
 RUN yarn build
 
-RUN yarn prisma db push
-RUN yarn prisma generate
 
 COPY . .
 EXPOSE 3000
