@@ -8,6 +8,7 @@ COPY yarn.lock ./
 
 COPY . .
 RUN yarn install --immutable --immutable-cache --check-cache
+RUN yarn prisma db push
 RUN yarn prisma generate
 
 RUN yarn build
