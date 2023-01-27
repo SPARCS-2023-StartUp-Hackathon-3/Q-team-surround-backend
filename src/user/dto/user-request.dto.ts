@@ -1,4 +1,5 @@
-import { IsEmail, IsString } from 'class-validator';
+import { Provider } from '@prisma/client';
+import { IsEmail, IsEnum, IsString } from 'class-validator';
 
 export class CreateUserRequestDto {
   @IsEmail()
@@ -6,6 +7,9 @@ export class CreateUserRequestDto {
 
   @IsString()
   password: string;
+
+  @IsEnum(Provider)
+  provider: Provider;
 
   @IsString()
   nickname: string;
