@@ -67,7 +67,10 @@ export class AuthService {
   getCookieOptions(tokenType: TokenType): CookieOptions {
     const maxAge = tokenType === 'Access_token' ? EXPIRATION.ACCESS_TOKEN : EXPIRATION.REFRESH_TOKEN;
 
-    const domain = URL.parse(this.configService.get('CLIENT_URI')).host;
+    const domain =
+      this.configService.get<string>('NODE_ENV') === 'prod'
+        ? URL.parse(this.configService.get('CLIENT_URI')).host
+        : 'localhost';
 
     return {
       httpOnly: true,
