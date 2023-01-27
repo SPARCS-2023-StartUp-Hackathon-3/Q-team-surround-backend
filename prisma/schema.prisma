@@ -10,7 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user {
+model User {
   id Int @default(autoincrement()) @id
   email String @db.VarChar(50) @unique
   password String? @db.Text
@@ -18,14 +18,14 @@ model user {
   createdAt DateTime @db.Timestamptz() @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  Album album[] @relation("USER_ALBUM")
-  Song song[] @relation("USER_SONG")
-  Userinfo userInfo? @relation("USER_INFO")
-  Playlist playlist[] @relation("USER_PLAYLIST")
-  History history[] @relation("USER_HISTORY")
+  Album Album[] @relation("USER_ALBUM")
+  Song Song[] @relation("USER_SONG")
+  Userinfo UserInfo? @relation("USER_INFO")
+  Playlist Playlist[] @relation("USER_PLAYLIST")
+  History History[] @relation("USER_HISTORY")
 }
 
-model userInfo {
+model UserInfo {
   provider Provider
   userType UserType @default(value: LISTENER) @map("user_type")
   phoneNumber String? @db.VarChar(11) @map("phone_number")
@@ -35,7 +35,7 @@ model userInfo {
 
   UserId Int @map("user_id")
 
-  User user @relation("USER_INFO", fields: [UserId], references: [id])
+  User User @relation("USER_INFO", fields: [UserId], references: [id])
 
   @@id([UserId])
   @@map("user_info")
@@ -52,7 +52,7 @@ enum UserType {
   ADMIN
 }
 
-model album {
+model Album {
   id Int @default(autoincrement()) @id
   title String @db.VarChar(50)
   description String? @db.Text
@@ -60,10 +60,10 @@ model album {
   createdAt DateTime @db.Timestamptz() @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  Song song[] @relation("ALBUM_SONG")
+  Song Song[] @relation("ALBUM_SONG")
   UserId Int @map("user_id")
 
-  User user @relation("USER_ALBUM", fields: [UserId], references: [id])
+  User User @relation("USER_ALBUM", fields: [UserId], references: [id])
 }
 
 enum AlbumKind {
@@ -72,7 +72,7 @@ enum AlbumKind {
   ALBUM
 }
 
-model song {
+model Song {
   id Int @default(autoincrement()) @id
   title String @db.VarChar(50)
   description String? @db.Text
@@ -84,11 +84,11 @@ model song {
   
   UserId Int @map("user_id")
   AlbumId Int @map("album_id")
-  Playlist playlist[] @relation("SONG_PLAYLIST")
-  History history[] @relation("SONG_HISTORY")
+  Playlist Playlist[] @relation("SONG_PLAYLIST")
+  History History[] @relation("SONG_HISTORY")
 
-  User user @relation("USER_SONG", fields: [UserId], references: [id])
-  Album album @relation("ALBUM_SONG", fields: [AlbumId], references: [id])
+  User User @relation("USER_SONG", fields: [UserId], references: [id])
+  Album Album @relation("ALBUM_SONG", fields: [AlbumId], references: [id])
 }
 
 enum Genre {
@@ -101,7 +101,7 @@ enum Genre {
   ROCK
 }
 
-model playlist {
+model Playlist {
   id Int @default(autoincrement()) @id
   title String @db.VarChar(20)
   isPublic Boolean @db.Boolean @default(false)
@@ -109,16 +109,16 @@ model playlist {
   UserId Int @map("user_id")
   SongId Int @map("song_id")
   
-  User user @relation("USER_PLAYLIST", fields: [UserId], references: [id])
-  Song song? @relation("SONG_PLAYLIST", fields: [SongId], references: [id])
+  User User @relation("USER_PLAYLIST", fields: [UserId], references: [id])
+  Song Song? @relation("SONG_PLAYLIST", fields: [SongId], references: [id])
 }
 
-model history {
+model History {
   id Int @default(autoincrement()) @id
   
   UserId Int @map("user_id")
   SongId Int @map("song_id")
 
-  User user @relation("USER_HISTORY", fields: [UserId], references: [id])
-  Song song @relation("SONG_HISTORY", fields: [SongId], references: [id])
+  User User @relation("USER_HISTORY", fields: [UserId], references: [id])
+  Song Song @relation("SONG_HISTORY", fields: [SongId], references: [id])
 }
