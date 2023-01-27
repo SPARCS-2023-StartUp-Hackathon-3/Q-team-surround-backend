@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - cicd/github-action
+      - main
 
 env:
   ECR_REGISTRY: 156401130715.dkr.ecr.ap-northeast-2.amazonaws.com/surround
@@ -43,6 +43,7 @@ jobs:
           echo JWT_REFRESH_TOKEN_SECRET=${{ secrets.JWT_REFRESH_TOKEN_SECRET }} >> .env
           echo REDIS_HOSTNAME=${{ secrets.REDIS_HOSTNAME }} >> .env
           echo REDIS_PORT=${{ secrets.REDIS_PORT }} >> .env
+          echo CLIENT_URI=${{ secrets.CLIENT_URI }} >> .env
           cat .env
 
       - name: Build, tag, and push image to Amazon ECR
