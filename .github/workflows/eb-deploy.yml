@@ -7,10 +7,10 @@ on:
       - cicd/github-action
 
 env:
-  ECR_REGISTRY: 213360237800.dkr.ecr.ap-northeast-2.amazonaws.com/surround
+  ECR_REGISTRY: 156401130715.dkr.ecr.ap-northeast-2.amazonaws.com/surround
   ECR_REPOSITORY: surround
   APPLICATION_NAME: surround
-  ENVIRONMENT_NAME: Surround-env-2
+  ENVIRONMENT_NAME: Surround-env
   AWS_REGION: ap-northeast-2
   GIT_SHA: ${{ github.sha }}
 
