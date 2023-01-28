@@ -2,13 +2,15 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import {
   ALREADY_EXISTS_USER,
+  INVALID_OAUTH_TOKEN,
   INVALID_REQUEST,
+  MISSING_EMAIL,
   NON_EXIST_USER,
   NOT_MATCHED,
 } from '../common/consts/exception-messages.const';
 import { CreateUserResponseDto } from '../user/dto/user-response.dto';
 import { UserService } from '../user/user.service';
-import { SigninRequestDto, SignupRequestDto } from './dtos/auth-request.dto';
+import { KakaoLoginRequestDto, SigninRequestDto, SignupRequestDto } from './dtos/auth-request.dto';
 import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -18,7 +20,8 @@ import * as URL from 'url';
 import { CookieOptions } from './types/cookie-option.interface';
 import { AuthRepository } from './auth.repository';
 import { SigninResponseDto } from './dtos/auth-response.dto';
-import { User } from '@prisma/client';
+import { Provider, User } from '@prisma/client';
+import axios from 'axios';
 
 @Injectable()
 export class AuthService {
@@ -38,7 +41,7 @@ export class AuthService {
         email,
         nickname,
         password: hashedPassword,
-        provider: 'LOCAL',
+        provider: Provider.LOCAL,
       });
 
       return newUser;
@@ -65,6 +68,40 @@ export class AuthService {
     }
 
     return { userId: exUser.id };
+  }
+
+  async kakaoLogin(kakaoLoginRequestDto: KakaoLoginRequestDto) {
+    const { accessToken } = kakaoLoginRequestDto;
+    const kakaoUser = await axios.get('https://kapi.kakao.com/v2/user/me', {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+
+    if (!kakaoUser) {
+      throw new BadRequestException(INVALID_OAUTH_TOKEN);
+    }
+
+    const kakaoData = kakaoUser.data;
+    const kakaoAccount = kakaoData['kakao_account'];
+    const email = kakaoAccount.has_email && !kakaoAccount.email_needs_agreement ? kakaoAccount.email : null;
+
+    if (!email) {
+      throw new BadRequestException(MISSING_EMAIL);
+    }
+
+    const existUser = await this.userService.findUserByEmail(email);
+
+    if (!existUser) {
+      const { nickname } = kakaoData['properties'];
+      const newUser = await this.userService.createUser({
+        email,
+        password: String(kakaoData.id),
+        provider: Provider.KAKAO,
+        nickname,
+      });
+      return newUser;
+    }
+
+    return existUser;
   }
 
   issueAccessToken(userId: number): string {

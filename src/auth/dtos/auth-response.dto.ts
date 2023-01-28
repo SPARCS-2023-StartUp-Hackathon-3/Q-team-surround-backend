@@ -18,3 +18,4 @@ export class SigninResponseDto {
 }
 
 export class TokenResponseDto extends SignupResponseDto {}
+export class KakaoLoginResponseDto extends SignupResponseDto {}
