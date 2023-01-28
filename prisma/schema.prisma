@@ -108,10 +108,10 @@ model Playlist {
   isPublic Boolean @db.Boolean @default(false)
 
   UserId Int @map("user_id")
-  SongId Int @map("song_id")
+  // SongId Int @map("song_id")
   
   User User @relation("USER_PLAYLIST", fields: [UserId], references: [id])
-  Song Song? @relation("SONG_PLAYLIST", fields: [SongId], references: [id])
+  Song Song[] @relation("SONG_PLAYLIST")
 }
 
 model History {

@@ -1,11 +1,19 @@
 import { Body, Controller, Get, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Song } from '@prisma/client';
 import { Auth } from '../auth/auth.decorator';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { UserPayload } from '../common/types/user-payload.interface';
-import { UploadMusicRequestDto } from './dtos/song-request.dto';
+import { AddToPlaylistRequestDto, UploadMusicRequestDto } from './dtos/song-request.dto';
 import { SongResponseDto } from './dtos/song-response.dto';
 import { SongService } from './song.service';
 
@@ -34,12 +42,27 @@ export class SongController {
     return await this.songService.uploadMusic(userId, uploadMusicRequestDto, song);
   }
 
-  @Get()
+  @Get('download')
   @Auth()
   @ApiOperation({ summary: '음악을 다운로드합니다.' })
   @ApiQuery({ description: '음원 제목을 쿼리스트링으로 넣어주세요.' })
   @ApiOkResponse({ description: '음원을 스트림으로 전달합니다.' })
   async streamingSong(@Query('title') title: string) {
     return await this.songService.streamingSong(title);
+  }
+
+  @Get('info')
+  @Auth()
+  @ApiOperation({ summary: '해당 음원의 세부정보를 불러옵니다.' })
+  @ApiOkResponse({ description: '해당 음원의 상세한 정보를 가져옵니다.' })
+  @ApiNotFoundResponse({ description: '해당 음원이 존재하지 않습니다.' })
+  async getMusicInfo(@Query('songId') musicId: number) {
+    return await this.songService.getMusicInfo(musicId);
+  }
+
+  @Post('playlist')
+  @Auth()
+  async addToPlaylist(@Body() addToPlaylistRequestDto: AddToPlaylistRequestDto) {
+    return await this.songService.addToPlaylist(addToPlaylistRequestDto);
   }
 }

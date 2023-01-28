@@ -28,7 +28,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
@@ -44,8 +44,8 @@ jobs:
           echo REDIS_HOSTNAME=${{ secrets.REDIS_HOSTNAME }} >> .env
           echo REDIS_PORT=${{ secrets.REDIS_PORT }} >> .env
           echo CLIENT_URI=${{ secrets.CLIENT_URI }} >> .env
-          echo AWS_ACCESS_KEY_S3=${{ secrets.AWS_ACCESS_KEY_S3 }} >> .env
-          echo AWS_SECRET_ACCESS_KEY_S3=${{ secrets.AWS_SECRET_ACCESS_KEY_S3 }} >> .env
+          echo AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }} >> .env
+          echo AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env
           echo AWS_BUCKET_REGION=${{ secrets.AWS_BUCKET_REGION }} >> .env
           echo AWS_BUCKET_NAME=${{ secrets.AWS_BUCKET_NAME }} >> .env
           cat .env

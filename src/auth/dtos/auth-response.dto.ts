@@ -11,11 +11,6 @@ export class SignupResponseDto {
   userId: number;
 }
 
-export class SigninResponseDto {
-  @ApiProperty()
-  @IsNumber()
-  userId: number;
-}
-
+export class SigninResponseDto extends SignupResponseDto {}
 export class TokenResponseDto extends SignupResponseDto {}
 export class KakaoLoginResponseDto extends SignupResponseDto {}
