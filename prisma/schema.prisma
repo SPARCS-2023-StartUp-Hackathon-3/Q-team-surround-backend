@@ -24,6 +24,7 @@ model User {
   Userinfo UserInfo? @relation("USER_INFO")
   Playlist Playlist[] @relation("USER_PLAYLIST")
   History History[] @relation("USER_HISTORY")
+  LikedSong Song[] @relation("USER_LIKE_SONG")
 }
 
 model UserInfo {
@@ -79,7 +80,7 @@ model Song {
   genre Genre
   lyrics String? @db.Text
   fileUrl String @db.Text @map("file_url")
-  views Int @db.Integer @default(0)
+  likes Int @db.Integer @default(0)
   createdAt DateTime @db.Timestamptz() @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   
@@ -87,6 +88,7 @@ model Song {
   AlbumId Int? @map("album_id")
   Playlist Playlist[] @relation("SONG_PLAYLIST")
   History History[] @relation("SONG_HISTORY")
+  Liker User[] @relation("USER_LIKE_SONG")
 
   User User @relation("USER_SONG", fields: [UserId], references: [id])
   Album Album? @relation("ALBUM_SONG", fields: [AlbumId], references: [id])
