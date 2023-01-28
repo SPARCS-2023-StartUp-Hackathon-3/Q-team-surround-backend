@@ -6,7 +6,11 @@ import { EXPIRATION } from '../common/consts/token.const';
 export class AuthRepository {
   constructor(private readonly redis: RedisCacheService) {}
 
-  async setRefreshToken(userId: number, refreshToken: string): Promise<'OK'> {
-    return await this.redis.set(String(userId), refreshToken, EXPIRATION.REFRESH_TOKEN);
+  async setRefreshToken(userId: number, refreshToken: string): Promise<void> {
+    await this.redis.set(String(userId), refreshToken, EXPIRATION.REFRESH_TOKEN);
+  }
+
+  async delRefreshToken(userId: number): Promise<void> {
+    await this.redis.del(String(userId));
   }
 }

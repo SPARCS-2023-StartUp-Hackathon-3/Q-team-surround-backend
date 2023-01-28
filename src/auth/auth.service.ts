@@ -121,8 +121,12 @@ export class AuthService {
     );
   }
 
-  async setRefreshToken(userId: number, refreshToken: string) {
+  async setRefreshToken(userId: number, refreshToken: string): Promise<void> {
     await this.authRepository.setRefreshToken(userId, refreshToken);
+  }
+
+  async delRefreshToken(userId: number): Promise<void> {
+    await this.authRepository.delRefreshToken(userId);
   }
 
   getCookieOptions(tokenType: TokenType): CookieOptions {
