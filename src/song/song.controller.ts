@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post, Query, UploadedFile, UseInterceptors } fro
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBody,
+  ApiConsumes,
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -26,9 +27,25 @@ export class SongController {
   @Auth()
   @UseInterceptors(FileInterceptor('song'))
   @ApiOperation({ summary: '음악을 업로드합니다.' })
+  @ApiConsumes('multipart/form-data')
+  // @ApiBody({
+  //   description: '업로드하기 위한 정보와, 파일도 같이 필요합니다. form-data로 다같이 보내주세요.',
+  //   type: UploadMusicRequestDto,
+  // })
   @ApiBody({
-    description: '업로드하기 위한 정보와, 파일도 같이 필요합니다. form-data로 다같이 보내주세요.',
-    type: UploadMusicRequestDto,
+    schema: {
+      type: 'object',
+      properties: {
+        title: { type: 'string' },
+        description: { type: 'integer', nullable: true },
+        genre: { type: 'string' },
+        AlbumId: { type: 'integer' },
+        song: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
   })
   @ApiCreatedResponse({
     description: '정상적으로 업로드가 완료되었습니다. 업로드에 시간이 좀 걸립니다.',
