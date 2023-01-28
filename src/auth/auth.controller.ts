@@ -1,10 +1,19 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiBody, ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Post, Res, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+  ApiBadRequestResponse,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { CookieOptions, Response } from 'express';
+import { SetCookieInterceptor } from '../common/interceptors/set-cookie.interceptor';
 import { AuthService } from './auth.service';
-import { SignupRequestDto } from './dtos/auth-request.dto';
-import { SignupResponseDto } from './dtos/auth-response.dto';
+import { SigninRequestDto, SignupRequestDto } from './dtos/auth-request.dto';
+import { SigninResponseDto, SignupResponseDto } from './dtos/auth-response.dto';
+import { LocalAuthGuard } from './guards/local-auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -30,4 +39,15 @@ export class AuthController {
 
     response.cookie('refresh_token', refreshToken, refreshTokenCookieOptions).json(responseData);
   }
+
+  @Post('signin')
+  @UseGuards(LocalAuthGuard)
+  @UseInterceptors(SetCookieInterceptor)
+  @ApiOperation({ summary: 'Local 로그인' })
+  @ApiBody({ description: 'Local 로그인을 위해 이메일, 패스워드가 필요합니다.', type: SigninRequestDto })
+  @ApiOkResponse({
+    description: 'Local 로그인에 성공하여 액세스 토큰을 반환하고, 쿠키에 리프레시 토큰을 저장합니다.',
+    type: SigninResponseDto,
+  })
+  async signin() {}
 }

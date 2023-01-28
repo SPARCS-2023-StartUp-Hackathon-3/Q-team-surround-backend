@@ -14,3 +14,13 @@ export class SignupRequestDto {
   @IsString()
   password: string;
 }
+
+export class SigninRequestDto {
+  @ApiProperty()
+  @IsEmail()
+  email: string;
+
+  @ApiProperty()
+  @IsString()
+  password: string;
+}

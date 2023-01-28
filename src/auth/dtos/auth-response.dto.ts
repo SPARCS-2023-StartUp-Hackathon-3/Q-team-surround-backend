@@ -10,3 +10,11 @@ export class SignupResponseDto {
   @IsNumber()
   userId: number;
 }
+
+export class SigninResponseDto {
+  @ApiProperty()
+  @IsNumber()
+  userId: number;
+}
+
+export class TokenResponseDto extends SignupResponseDto {}
