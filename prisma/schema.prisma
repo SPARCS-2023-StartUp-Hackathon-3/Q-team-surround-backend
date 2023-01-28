@@ -78,17 +78,18 @@ model Song {
   description String? @db.Text
   genre Genre
   lyrics String? @db.Text
+  fileUrl String @db.Text @map("file_url")
   views Int @db.Integer @default(0)
   createdAt DateTime @db.Timestamptz() @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   
   UserId Int @map("user_id")
-  AlbumId Int @map("album_id")
+  AlbumId Int? @map("album_id")
   Playlist Playlist[] @relation("SONG_PLAYLIST")
   History History[] @relation("SONG_HISTORY")
 
   User User @relation("USER_SONG", fields: [UserId], references: [id])
-  Album Album @relation("ALBUM_SONG", fields: [AlbumId], references: [id])
+  Album Album? @relation("ALBUM_SONG", fields: [AlbumId], references: [id])
 }
 
 enum Genre {
