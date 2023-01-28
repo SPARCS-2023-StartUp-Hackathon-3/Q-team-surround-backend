@@ -28,4 +28,12 @@ export class SongService {
 
     return await this.fileService.streamingSong(title);
   }
+
+  async getMusicInfo(musicId: number) {
+    const exMusic = await this.songRepository.findMusicInfoById(musicId);
+    if (!exMusic) {
+      throw new NotFoundException('해당 음원이 존재하지 않습니다.');
+    }
+    return exMusic;
+  }
 }

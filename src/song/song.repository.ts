@@ -23,4 +23,12 @@ export class SongRepository {
       },
     });
   }
+
+  async findMusicInfoById(musicId: number) {
+    return await this.prisma.song.findUnique({
+      where: {
+        id: musicId,
+      },
+    });
+  }
 }
