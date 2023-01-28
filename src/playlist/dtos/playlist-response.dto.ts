@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Song } from '@prisma/client';
+import { SongResponseDto } from '../../song/dtos/song-response.dto';
 
 export class CreatePlaylistResponseDto {
   @ApiProperty()
@@ -14,6 +15,8 @@ export class CreatePlaylistResponseDto {
   @ApiProperty()
   UserId: number;
 
-  @ApiProperty()
+  @ApiProperty({ type: SongResponseDto, isArray: true })
   Song: Song[];
 }
+
+export class GetPlaylistResponseDto extends CreatePlaylistResponseDto {}

@@ -1,6 +1,5 @@
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
-import { Prisma } from '@prisma/client';
 import { Auth } from '../auth/auth.decorator';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { UserPayload } from '../common/types/user-payload.interface';
@@ -15,7 +14,7 @@ export class PlaylistController {
   @Get(':playlistId')
   @Auth()
   @ApiOperation({ summary: '특정 플레이리스트를 가져옵니다.' })
-  @ApiOkResponse({ description: '플레이리스트 조회에 성공했습니다.', type: Prisma.Prisma__PlaylistClient })
+  @ApiOkResponse({ description: '플레이리스트 조회에 성공했습니다.', type: CreatePlaylistResponseDto })
   async getPlaylist(@CurrentUser() { userId }: UserPayload, @Param('playlistId') playlistId: number) {
     return await this.playlistService.getPlaylist(userId, playlistId);
   }

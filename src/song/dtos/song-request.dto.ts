@@ -16,15 +16,18 @@ export class UploadMusicRequestDto {
   @IsEnum(Genre)
   genre: Genre;
 
+  @ApiProperty()
   @IsString()
   @IsOptional()
   AlbumId?: number;
 }
 
 export class AddToPlaylistRequestDto {
+  @ApiProperty()
   @IsNumber()
   playlistId: number;
 
+  @ApiProperty()
   @IsNumber()
   songId: number;
 }
