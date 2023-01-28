@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, StreamableFile } from '@nestjs/common';
 import { FILE_NOT_EXIST } from '../common/consts/exception-messages.const';
 import * as AWS from 'aws-sdk';
 import { ConfigService } from '@nestjs/config';
@@ -15,17 +15,30 @@ export class FileService {
   });
   AWS_BUCKET_NAME = this.configService.get<string>('AWS_BUCKET_NAME');
 
-  async uploadSong(song: Express.MulterS3.File) {
+  async uploadSong(song: Express.MulterS3.File, title: string) {
     if (!song) {
       throw new BadRequestException(FILE_NOT_EXIST);
     }
 
+    const ext = song.originalname.split('.').at(-1);
+    const savingName = title + '.' + ext;
     const param = {
       Bucket: this.AWS_BUCKET_NAME,
-      Key: String(song.originalname),
+      Key: 'songs/' + savingName,
       Body: song.buffer,
     };
     await this.s3.upload(param).promise();
-    return { filePath: '/songs/' + song.originalname };
+    return { filePath: '/songs/' + title };
+  }
+
+  async streamingSong(song: string) {
+    const param = {
+      Bucket: this.AWS_BUCKET_NAME,
+      Key: 'songs/' + song + '.mp3',
+    };
+
+    const stream = this.s3.getObject(param).createReadStream();
+
+    return new StreamableFile(stream);
   }
 }
