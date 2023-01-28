@@ -8,6 +8,7 @@ import { EXPIRATION } from '../common/consts/token.const';
 import { AuthRepository } from './auth.repository';
 import { RedisCacheModule } from '../cache/redis.module';
 import { LocalStrategy } from './strategies/local.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
   imports: [
@@ -23,6 +24,6 @@ import { LocalStrategy } from './strategies/local.strategy';
     RedisCacheModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, AuthRepository, LocalStrategy],
+  providers: [AuthService, AuthRepository, LocalStrategy, JwtStrategy],
 })
 export class AuthModule {}
