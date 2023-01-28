@@ -18,4 +18,8 @@ export class UserService {
   async updateLikedMusic(userId: number, songId: number) {
     return await this.userRepository.updateLikedMusic(userId, songId);
   }
+
+  async getAllLikedMusics(userId: number) {
+    return await this.userRepository.findLikedMusics(userId);
+  }
 }
