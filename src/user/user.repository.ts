@@ -53,4 +53,17 @@ export class UserRepository {
       throw new BadRequestException('유저 혹은 음원이 존재하지 않습니다.');
     }
   }
+
+  async findLikedMusics(userId: number) {
+    const { LikedSong: likedSong } = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        LikedSong: true,
+      },
+    });
+
+    return likedSong;
+  }
 }
