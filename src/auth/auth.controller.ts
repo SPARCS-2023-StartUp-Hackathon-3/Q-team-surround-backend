@@ -89,7 +89,10 @@ export class AuthController {
   @Post('logout')
   @HttpCode(204)
   @Auth()
-  @ApiOperation({ description: 'refresh_token 쿠키와 레디스 세션을 삭제합니다.' })
+  @ApiOperation({
+    summary: '유저를 로그아웃 시키며, refresh_token을 삭제합니다.',
+    description: 'refresh_token 쿠키와 레디스 세션을 삭제합니다.',
+  })
   @ApiNoContentResponse({ description: '로그아웃에 성공했습니다.' })
   async logout(@CurrentUser() { userId }: UserPayload, @Res({ passthrough: true }) response: Response) {
     await this.authService.delRefreshToken(userId);
