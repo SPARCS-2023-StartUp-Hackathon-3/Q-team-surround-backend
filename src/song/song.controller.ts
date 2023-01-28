@@ -13,7 +13,7 @@ import { Song } from '@prisma/client';
 import { Auth } from '../auth/auth.decorator';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { UserPayload } from '../common/types/user-payload.interface';
-import { UploadMusicRequestDto } from './dtos/song-request.dto';
+import { AddToPlaylistRequestDto, UploadMusicRequestDto } from './dtos/song-request.dto';
 import { SongResponseDto } from './dtos/song-response.dto';
 import { SongService } from './song.service';
 
@@ -58,5 +58,11 @@ export class SongController {
   @ApiNotFoundResponse({ description: '해당 음원이 존재하지 않습니다.' })
   async getMusicInfo(@Query('songId') musicId: number) {
     return await this.songService.getMusicInfo(musicId);
+  }
+
+  @Post('playlist')
+  @Auth()
+  async addToPlaylist(@Body() addToPlaylistRequestDto: AddToPlaylistRequestDto) {
+    return await this.songService.addToPlaylist(addToPlaylistRequestDto);
   }
 }

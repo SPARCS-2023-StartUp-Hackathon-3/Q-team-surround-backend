@@ -1,6 +1,6 @@
 export interface CookieOptions {
   httpOnly: boolean;
   maxAge: number;
-  domain: string;
+  // domain: string;
   secure: boolean;
 }
