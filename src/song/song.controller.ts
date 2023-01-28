@@ -1,6 +1,6 @@
-import { Body, Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Song } from '@prisma/client';
 import { Auth } from '../auth/auth.decorator';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
@@ -32,5 +32,14 @@ export class SongController {
     @UploadedFile() song: Express.MulterS3.File,
   ): Promise<Song> {
     return await this.songService.uploadMusic(userId, uploadMusicRequestDto, song);
+  }
+
+  @Get()
+  @Auth()
+  @ApiOperation({ summary: '음악을 다운로드합니다.' })
+  @ApiQuery({ description: '음원 제목을 쿼리스트링으로 넣어주세요.' })
+  @ApiOkResponse({ description: '음원을 스트림으로 전달합니다.' })
+  async downloadMusic(@Query('title') title: string) {
+    return await this.songService.downloadMusic(title);
   }
 }

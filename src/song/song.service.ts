@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { FileService } from '../file/file.service';
 import { UploadMusicRequestDto } from './dtos/song-request.dto';
 import { SongRepository } from './song.repository';
@@ -13,9 +13,19 @@ export class SongService {
     // if (exMusic) {
     //   throw new BadRequestException('이미 존재하는 음악입니다.');
     // }
-    const { filePath } = await this.fileService.uploadSong(song);
+    const { filePath } = await this.fileService.uploadSong(song, uploadMusicRequestDto.title);
     const newMusic = await this.songRepository.uploadMusic(userId, uploadMusicRequestDto, filePath);
 
     return newMusic;
+  }
+
+  async downloadMusic(title: string) {
+    const exMusic = await this.songRepository.findMusicByTitle(title);
+
+    if (!exMusic) {
+      throw new NotFoundException('해당 음원이 존재하지 않습니다.');
+    }
+
+    return await this.fileService.downloadSong(title);
   }
 }
