@@ -24,3 +24,9 @@ export class SigninRequestDto {
   @IsString()
   password: string;
 }
+
+export class KakaoLoginRequestDto {
+  @ApiProperty()
+  @IsString()
+  accessToken: string;
+}
