@@ -16,11 +16,11 @@ export class SongRepository {
     });
   }
 
-  // async findMusic(fileUrl: string) {
-  //   return await this.prisma.song.findUnique({
-  //     where: {
-  //       fileUrl,
-  //     },
-  //   });
-  // }
+  async findMusicByTitle(title: string) {
+    return await this.prisma.song.findFirst({
+      where: {
+        title,
+      },
+    });
+  }
 }
