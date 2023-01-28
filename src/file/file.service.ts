@@ -9,8 +9,8 @@ export class FileService {
   s3 = new AWS.S3({
     region: this.configService.get('AWS_BUCKET_REGION'),
     credentials: {
-      accessKeyId: this.configService.get('AWS_ACCESS_KEY_S3'),
-      secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY_S3'),
+      accessKeyId: this.configService.get('AWS_ACCESS_KEY'),
+      secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY'),
     },
   });
   AWS_BUCKET_NAME = this.configService.get<string>('AWS_BUCKET_NAME');
