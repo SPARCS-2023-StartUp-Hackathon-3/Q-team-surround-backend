@@ -1,9 +1,14 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
-import { ALREADY_EXISTS_USER, INVALID_REQUEST } from '../common/consts/exception-messages.const';
+import {
+  ALREADY_EXISTS_USER,
+  INVALID_REQUEST,
+  NON_EXIST_USER,
+  NOT_MATCHED,
+} from '../common/consts/exception-messages.const';
 import { CreateUserResponseDto } from '../user/dto/user-response.dto';
 import { UserService } from '../user/user.service';
-import { SignupRequestDto } from './dtos/auth-request.dto';
+import { SigninRequestDto, SignupRequestDto } from './dtos/auth-request.dto';
 import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -12,6 +17,8 @@ import { TokenType } from './types/token.enum';
 import * as URL from 'url';
 import { CookieOptions } from './types/cookie-option.interface';
 import { AuthRepository } from './auth.repository';
+import { SigninResponseDto } from './dtos/auth-response.dto';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -41,6 +48,23 @@ export class AuthService {
       }
       throw new BadRequestException(INVALID_REQUEST);
     }
+  }
+
+  async validateUser(signinRequestDto: SigninRequestDto): Promise<SigninResponseDto> {
+    const { email, password } = signinRequestDto;
+    const exUser: Partial<User> = await this.userService.findUserByEmail(email);
+
+    if (!exUser) {
+      throw new NotFoundException(NON_EXIST_USER);
+    }
+
+    const passwordMatches: boolean = await argon.verify(exUser.password, password);
+
+    if (!passwordMatches) {
+      throw new BadRequestException(NOT_MATCHED);
+    }
+
+    return { userId: exUser.id };
   }
 
   issueAccessToken(userId: number): string {
