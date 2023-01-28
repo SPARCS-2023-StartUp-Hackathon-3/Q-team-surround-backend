@@ -31,6 +31,17 @@ export class FileService {
     return { filePath: '/songs/' + title };
   }
 
+  async uploadCoverImage(cover: Express.MulterS3.File) {
+    const param = {
+      Bucket: this.AWS_BUCKET_NAME,
+      Key: 'covers/' + cover.originalname,
+      Body: cover.buffer,
+    };
+    const uploaded: AWS.S3.ManagedUpload.SendData = await this.s3.upload(param).promise();
+
+    return uploaded.Location;
+  }
+
   async streamingSong(song: string) {
     const param = {
       Bucket: this.AWS_BUCKET_NAME,
@@ -39,6 +50,7 @@ export class FileService {
 
     const stream = this.s3.getObject(param).createReadStream();
 
-    return new StreamableFile(stream);
+    // return new StreamableFile(stream);
+    return stream;
   }
 }

@@ -1,7 +1,6 @@
-import { Body, Controller, Get, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { Body, Controller, Get, Post, Query, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import {
-  ApiBody,
   ApiConsumes,
   ApiCreatedResponse,
   ApiNotFoundResponse,
@@ -25,38 +24,36 @@ export class SongController {
 
   @Post('upload')
   @Auth()
-  @UseInterceptors(FileInterceptor('song'))
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'song' }, { name: 'cover' }]))
   @ApiOperation({ summary: '음악을 업로드합니다.' })
   @ApiConsumes('multipart/form-data')
   // @ApiBody({
-  //   description: '업로드하기 위한 정보와, 파일도 같이 필요합니다. form-data로 다같이 보내주세요.',
-  //   type: UploadMusicRequestDto,
+  //   schema: {
+  //     type: 'object',
+  //     properties: {
+  //       title: { type: 'string' },
+  //       description: { type: 'integer', nullable: true },
+  //       genre: { type: 'string' },
+  //       AlbumId: { type: 'integer' },
+  //       song: {
+  //         type: 'string',
+  //         format: 'binary',
+  //       },
+  //     },
+  //   },
   // })
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        title: { type: 'string' },
-        description: { type: 'integer', nullable: true },
-        genre: { type: 'string' },
-        AlbumId: { type: 'integer' },
-        song: {
-          type: 'string',
-          format: 'binary',
-        },
-      },
-    },
-  })
   @ApiCreatedResponse({
     description: '정상적으로 업로드가 완료되었습니다. 업로드에 시간이 좀 걸립니다.',
     type: SongResponseDto,
   })
   async uploadMusic(
-    @CurrentUser() { userId }: UserPayload,
+    @UploadedFiles() files: Express.MulterS3.File[],
     @Body() uploadMusicRequestDto: UploadMusicRequestDto,
-    @UploadedFile() song: Express.MulterS3.File,
+    @CurrentUser() { userId }: UserPayload,
   ): Promise<Song> {
-    return await this.songService.uploadMusic(userId, uploadMusicRequestDto, song);
+    const song = files['song'][0];
+    const cover = files['cover'][0];
+    return await this.songService.uploadMusic(userId, uploadMusicRequestDto, song, cover);
   }
 
   @Get('download')

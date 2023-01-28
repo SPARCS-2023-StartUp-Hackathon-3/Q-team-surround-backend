@@ -10,12 +10,18 @@ export class SongRepository {
     @Inject(forwardRef(() => UserRepository)) private readonly userRepository: UserRepository,
   ) {}
 
-  async uploadMusic(userId: number, uploadMusicRequestDto: UploadMusicRequestDto, fileUrl: string) {
+  async uploadMusic(
+    userId: number,
+    uploadMusicRequestDto: UploadMusicRequestDto,
+    fileUrl: string,
+    imageLocation: string,
+  ) {
     return await this.prisma.song.create({
       data: {
         ...uploadMusicRequestDto,
         fileUrl,
         UserId: userId,
+        coverImageUrl: imageLocation,
       },
     });
   }
