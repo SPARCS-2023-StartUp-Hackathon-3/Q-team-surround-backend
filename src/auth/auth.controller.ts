@@ -3,9 +3,11 @@ import {
   ApiBadRequestResponse,
   ApiBody,
   ApiCreatedResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { CookieOptions, Response } from 'express';
@@ -49,5 +51,8 @@ export class AuthController {
     description: 'Local 로그인에 성공하여 액세스 토큰을 반환하고, 쿠키에 리프레시 토큰을 저장합니다.',
     type: SigninResponseDto,
   })
+  @ApiNotFoundResponse({ description: '데이터베이스에 존재하지 않는 유저입니다.' })
+  @ApiBadRequestResponse({ description: '비밀번호가 일치하지 않습니다.' })
+  @ApiUnauthorizedResponse({ description: '유효하지 않은 요청입니다.' })
   async signin() {}
 }
