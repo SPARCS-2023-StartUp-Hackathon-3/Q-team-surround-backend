@@ -9,8 +9,8 @@ on:
 env:
   ECR_REGISTRY: 156401130715.dkr.ecr.ap-northeast-2.amazonaws.com/surround
   ECR_REPOSITORY: surround
-  APPLICATION_NAME: surround
-  ENVIRONMENT_NAME: Surround-env
+  APPLICATION_NAME: surround-prod
+  ENVIRONMENT_NAME: Surroundprod-env
   AWS_REGION: ap-northeast-2
   GIT_SHA: ${{ github.sha }}
 
@@ -44,8 +44,8 @@ jobs:
           echo REDIS_HOSTNAME=${{ secrets.REDIS_HOSTNAME }} >> .env
           echo REDIS_PORT=${{ secrets.REDIS_PORT }} >> .env
           echo CLIENT_URI=${{ secrets.CLIENT_URI }} >> .env
-          echo AWS_ACCESS_KEY_S3=${{ secrets.AWS_ACCESS_KEY }} >> .env
-          echo AWS_SECRET_ACCESS_KEY_S3=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env
+          echo AWS_ACCESS_KEY_S3=${{ secrets.AWS_ACCESS_KEY_S3 }} >> .env
+          echo AWS_SECRET_ACCESS_KEY_S3=${{ secrets.AWS_SECRET_ACCESS_KEY_S3 }} >> .env
           echo AWS_BUCKET_REGION=${{ secrets.AWS_BUCKET_REGION }} >> .env
           echo AWS_BUCKET_NAME=${{ secrets.AWS_BUCKET_NAME }} >> .env
           cat .env
