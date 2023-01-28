@@ -8,6 +8,7 @@ import { RedisConfig } from './cache/redis.config';
 import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
 import { SongModule } from './song/song.module';
+import { PlaylistModule } from './playlist/playlist.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { SongModule } from './song/song.module';
     FileModule,
     UserModule,
     SongModule,
+    PlaylistModule,
   ],
   controllers: [AppController],
 })
