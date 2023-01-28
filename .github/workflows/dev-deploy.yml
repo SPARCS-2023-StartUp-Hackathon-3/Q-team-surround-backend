@@ -16,10 +16,10 @@ env:
 
 jobs:
   deploy-prod:
-    name: Deploy to production
+    name: Deploy to develop
     runs-on: ubuntu-latest
     environment:
-      name: production
+      name: develop
 
     steps:
       - name: Checkout
