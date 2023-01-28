@@ -14,7 +14,7 @@ import { Song } from '@prisma/client';
 import { Auth } from '../auth/auth.decorator';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { UserPayload } from '../common/types/user-payload.interface';
-import { AddToPlaylistRequestDto, UploadMusicRequestDto } from './dtos/song-request.dto';
+import { AddToPlaylistRequestDto, LikeMusicRequestDto, UploadMusicRequestDto } from './dtos/song-request.dto';
 import { SongResponseDto } from './dtos/song-response.dto';
 import { SongService } from './song.service';
 
@@ -77,9 +77,15 @@ export class SongController {
     return await this.songService.getMusicInfo(musicId);
   }
 
-  @Post('playlist')
+  // @Post('playlist')
+  // @Auth()
+  // async addToPlaylist(@Body() addToPlaylistRequestDto: AddToPlaylistRequestDto) {
+  //   return await this.songService.addToPlaylist(addToPlaylistRequestDto);
+  // }
+
+  @Post('like')
   @Auth()
-  async addToPlaylist(@Body() addToPlaylistRequestDto: AddToPlaylistRequestDto) {
-    return await this.songService.addToPlaylist(addToPlaylistRequestDto);
+  async likeMusic(@CurrentUser() { userId }: UserPayload, @Body() likeMusicReqeustDto: LikeMusicRequestDto) {
+    return await this.songService.likeMusic(userId, likeMusicReqeustDto);
   }
 }

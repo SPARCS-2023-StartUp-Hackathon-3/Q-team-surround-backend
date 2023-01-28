@@ -1,11 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { FileService } from '../file/file.service';
-import { AddToPlaylistRequestDto, UploadMusicRequestDto } from './dtos/song-request.dto';
+import { UserService } from '../user/user.service';
+import { AddToPlaylistRequestDto, LikeMusicRequestDto, UploadMusicRequestDto } from './dtos/song-request.dto';
 import { SongRepository } from './song.repository';
 
 @Injectable()
 export class SongService {
-  constructor(private readonly songRepository: SongRepository, private readonly fileService: FileService) {}
+  constructor(
+    private readonly songRepository: SongRepository,
+    private readonly fileService: FileService,
+    private readonly userService: UserService,
+  ) {}
 
   async uploadMusic(userId: number, uploadMusicRequestDto: UploadMusicRequestDto, song: Express.MulterS3.File) {
     // const exMusic = await this.songRepository.findMusic(fileUrl);
@@ -39,5 +44,14 @@ export class SongService {
 
   async addToPlaylist(addToPlaylistRequestDto: AddToPlaylistRequestDto) {
     // const { playlistId, songId } = await this.songRepository.addToPlaylist;
+  }
+
+  async likeMusic(userId: number, likeMusicReqeustDto: LikeMusicRequestDto) {
+    const { songId } = likeMusicReqeustDto;
+    const [updatedLikedSong, updatedLiker] = await Promise.all([
+      this.songRepository.updateLiker(userId, songId),
+      this.userService.updateLikedMusic(userId, songId),
+    ]);
+    console.log(updatedLikedSong, updatedLiker);
   }
 }
