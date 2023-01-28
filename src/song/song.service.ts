@@ -52,6 +52,6 @@ export class SongService {
       this.songRepository.updateLiker(userId, songId),
       this.userService.updateLikedMusic(userId, songId),
     ]);
-    console.log(updatedLikedSong, updatedLiker);
+    return { ...updatedLikedSong, ...updatedLiker };
   }
 }
