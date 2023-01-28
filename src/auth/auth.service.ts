@@ -19,9 +19,9 @@ import { TokenType } from './types/token.enum';
 import * as URL from 'url';
 import { CookieOptions } from './types/cookie-option.interface';
 import { AuthRepository } from './auth.repository';
-import { SigninResponseDto } from './dtos/auth-response.dto';
 import { Provider, User } from '@prisma/client';
 import axios from 'axios';
+import { UserPayload } from '../common/types/user-payload.interface';
 
 @Injectable()
 export class AuthService {
@@ -53,7 +53,7 @@ export class AuthService {
     }
   }
 
-  async validateUser(signinRequestDto: SigninRequestDto): Promise<SigninResponseDto> {
+  async validateUser(signinRequestDto: SigninRequestDto): Promise<UserPayload> {
     const { email, password } = signinRequestDto;
     const exUser: Partial<User> = await this.userService.findUserByEmail(email);
 
