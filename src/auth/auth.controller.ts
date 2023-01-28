@@ -1,8 +1,9 @@
-import { Body, Controller, Post, Res, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, Res, UseGuards, UseInterceptors } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
   ApiCreatedResponse,
+  ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -10,8 +11,11 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { CookieOptions, Response } from 'express';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { SetCookieInterceptor } from '../common/interceptors/set-cookie.interceptor';
+import { UserPayload } from '../common/types/user-payload.interface';
 import { CreateUserResponseDto } from '../user/dto/user-response.dto';
+import { Auth } from './auth.decorator';
 import { AuthService } from './auth.service';
 import { KakaoLoginRequestDto, SigninRequestDto, SignupRequestDto } from './dtos/auth-request.dto';
 import { KakaoLoginResponseDto, SigninResponseDto, SignupResponseDto } from './dtos/auth-response.dto';
@@ -80,5 +84,18 @@ export class AuthController {
     const responseData: KakaoLoginResponseDto = { accessToken, userId: user.id };
 
     response.cookie('refresh_token', refreshToken, refreshTokenCookieOptions).json(responseData);
+  }
+
+  @Post('logout')
+  @HttpCode(204)
+  @Auth()
+  @ApiOperation({
+    summary: '유저를 로그아웃 시키며, refresh_token을 삭제합니다.',
+    description: 'refresh_token 쿠키와 레디스 세션을 삭제합니다.',
+  })
+  @ApiNoContentResponse({ description: '로그아웃에 성공했습니다.' })
+  async logout(@CurrentUser() { userId }: UserPayload, @Res({ passthrough: true }) response: Response) {
+    await this.authService.delRefreshToken(userId);
+    response.clearCookie('refresh_token');
   }
 }
