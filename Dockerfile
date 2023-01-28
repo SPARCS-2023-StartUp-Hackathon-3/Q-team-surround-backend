@@ -13,7 +13,5 @@ RUN yarn prisma generate
 
 RUN yarn build
 
-COPY ../env/.env .env
-
-EXPOSE 8081
+EXPOSE 3000
 CMD ["yarn", "start:prod"]
