@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - main
+      - develop
 
 env:
   ECR_REGISTRY: 156401130715.dkr.ecr.ap-northeast-2.amazonaws.com/surround
@@ -16,10 +16,10 @@ env:
 
 jobs:
   deploy-prod:
-    name: Deploy to production
+    name: Deploy to develop
     runs-on: ubuntu-latest
     environment:
-      name: production
+      name: develop
 
     steps:
       - name: Checkout
@@ -54,7 +54,7 @@ jobs:
           GIT_SHA: ${{ env.GIT_SHA }}
           IMAGE_TAG: latest
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . -f Dockerfile.dev
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       - name: Get current time
