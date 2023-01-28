@@ -17,7 +17,7 @@ export class UploadMusicRequestDto {
   genre: Genre;
 
   @ApiProperty()
-  @IsString()
+  @IsNumber()
   @IsOptional()
   AlbumId?: number;
 }

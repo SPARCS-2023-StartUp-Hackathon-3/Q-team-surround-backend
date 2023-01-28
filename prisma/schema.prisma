@@ -80,6 +80,7 @@ model Song {
   genre Genre
   lyrics String? @db.Text
   fileUrl String @db.Text @map("file_url")
+  coverImageUrl String @db.Text @map("cover_image_url")
   likes Int @db.Integer @default(0)
   createdAt DateTime @db.Timestamptz() @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

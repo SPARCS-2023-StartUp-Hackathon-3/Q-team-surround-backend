@@ -12,14 +12,20 @@ export class SongService {
     private readonly userService: UserService,
   ) {}
 
-  async uploadMusic(userId: number, uploadMusicRequestDto: UploadMusicRequestDto, song: Express.MulterS3.File) {
+  async uploadMusic(
+    userId: number,
+    uploadMusicRequestDto: UploadMusicRequestDto,
+    song: Express.MulterS3.File,
+    cover: Express.MulterS3.File,
+  ) {
     // const exMusic = await this.songRepository.findMusic(fileUrl);
 
     // if (exMusic) {
     //   throw new BadRequestException('이미 존재하는 음악입니다.');
     // }
+    const imageLocation = await this.fileService.uploadCoverImage(cover);
     const { filePath } = await this.fileService.uploadSong(song, uploadMusicRequestDto.title);
-    const newMusic = await this.songRepository.uploadMusic(userId, uploadMusicRequestDto, filePath);
+    const newMusic = await this.songRepository.uploadMusic(userId, uploadMusicRequestDto, filePath, imageLocation);
 
     return newMusic;
   }
