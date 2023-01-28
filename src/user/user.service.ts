@@ -14,4 +14,8 @@ export class UserService {
   async findUserByEmail(email: string): Promise<FindUserResponseDto> {
     return await this.userRepository.findUniqueUser(email);
   }
+
+  async updateLikedMusic(userId: number, songId: number) {
+    return await this.userRepository.updateLikedMusic(userId, songId);
+  }
 }

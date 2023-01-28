@@ -31,3 +31,9 @@ export class AddToPlaylistRequestDto {
   @IsNumber()
   songId: number;
 }
+
+export class LikeMusicRequestDto {
+  @ApiProperty()
+  @IsNumber()
+  songId: number;
+}

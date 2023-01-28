@@ -14,8 +14,8 @@ import { Song } from '@prisma/client';
 import { Auth } from '../auth/auth.decorator';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { UserPayload } from '../common/types/user-payload.interface';
-import { AddToPlaylistRequestDto, UploadMusicRequestDto } from './dtos/song-request.dto';
-import { SongResponseDto } from './dtos/song-response.dto';
+import { AddToPlaylistRequestDto, LikeMusicRequestDto, UploadMusicRequestDto } from './dtos/song-request.dto';
+import { LikeMusicResponseDto, SongResponseDto } from './dtos/song-response.dto';
 import { SongService } from './song.service';
 
 @ApiTags('Song')
@@ -77,9 +77,20 @@ export class SongController {
     return await this.songService.getMusicInfo(musicId);
   }
 
-  @Post('playlist')
+  // @Post('playlist')
+  // @Auth()
+  // async addToPlaylist(@Body() addToPlaylistRequestDto: AddToPlaylistRequestDto) {
+  //   return await this.songService.addToPlaylist(addToPlaylistRequestDto);
+  // }
+
+  @Post('like')
   @Auth()
-  async addToPlaylist(@Body() addToPlaylistRequestDto: AddToPlaylistRequestDto) {
-    return await this.songService.addToPlaylist(addToPlaylistRequestDto);
+  @ApiOperation({ summary: '해당 음악에 좋아요를 누릅니다.' })
+  @ApiCreatedResponse({
+    description: '좋아요에 성공하여, 유저의 좋아요 목록과 해당 게시물을 좋아요 한 유저를 전달합니다.',
+    type: LikeMusicResponseDto,
+  })
+  async likeMusic(@CurrentUser() { userId }: UserPayload, @Body() likeMusicReqeustDto: LikeMusicRequestDto) {
+    return await this.songService.likeMusic(userId, likeMusicReqeustDto);
   }
 }
