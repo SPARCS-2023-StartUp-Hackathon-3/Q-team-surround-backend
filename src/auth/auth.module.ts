@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EXPIRATION } from '../common/consts/token.const';
 import { AuthRepository } from './auth.repository';
 import { RedisCacheModule } from '../cache/redis.module';
+import { LocalStrategy } from './strategies/local.strategy';
 
 @Module({
   imports: [
@@ -22,6 +23,6 @@ import { RedisCacheModule } from '../cache/redis.module';
     RedisCacheModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, AuthRepository],
+  providers: [AuthService, AuthRepository, LocalStrategy],
 })
 export class AuthModule {}
