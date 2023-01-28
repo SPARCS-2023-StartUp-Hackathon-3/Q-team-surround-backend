@@ -39,7 +39,7 @@ export class SongController {
   @ApiOperation({ summary: '음악을 다운로드합니다.' })
   @ApiQuery({ description: '음원 제목을 쿼리스트링으로 넣어주세요.' })
   @ApiOkResponse({ description: '음원을 스트림으로 전달합니다.' })
-  async downloadMusic(@Query('title') title: string) {
-    return await this.songService.downloadMusic(title);
+  async streamingSong(@Query('title') title: string) {
+    return await this.songService.streamingSong(title);
   }
 }

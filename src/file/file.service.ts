@@ -31,7 +31,7 @@ export class FileService {
     return { filePath: '/songs/' + title };
   }
 
-  async downloadSong(song: string) {
+  async streamingSong(song: string) {
     const param = {
       Bucket: this.AWS_BUCKET_NAME,
       Key: 'songs/' + song + '.mp3',

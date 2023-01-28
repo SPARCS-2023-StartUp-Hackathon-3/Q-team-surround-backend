@@ -19,13 +19,13 @@ export class SongService {
     return newMusic;
   }
 
-  async downloadMusic(title: string) {
+  async streamingSong(title: string) {
     const exMusic = await this.songRepository.findMusicByTitle(title);
 
     if (!exMusic) {
       throw new NotFoundException('해당 음원이 존재하지 않습니다.');
     }
 
-    return await this.fileService.downloadSong(title);
+    return await this.fileService.streamingSong(title);
   }
 }
