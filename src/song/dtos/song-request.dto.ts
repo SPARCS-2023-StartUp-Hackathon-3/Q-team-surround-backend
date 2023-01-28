@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Genre } from '@prisma/client';
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UploadMusicRequestDto {
   @ApiProperty()
@@ -19,4 +19,12 @@ export class UploadMusicRequestDto {
   @IsString()
   @IsOptional()
   AlbumId?: number;
+}
+
+export class AddToPlaylistRequestDto {
+  @IsNumber()
+  playlistId: number;
+
+  @IsNumber()
+  songId: number;
 }

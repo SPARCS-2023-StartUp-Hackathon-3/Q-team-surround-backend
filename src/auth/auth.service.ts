@@ -140,7 +140,6 @@ export class AuthService {
     return {
       httpOnly: true,
       maxAge,
-      domain,
       secure: true,
     };
   }

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { FileService } from '../file/file.service';
-import { UploadMusicRequestDto } from './dtos/song-request.dto';
+import { AddToPlaylistRequestDto, UploadMusicRequestDto } from './dtos/song-request.dto';
 import { SongRepository } from './song.repository';
 
 @Injectable()
@@ -35,5 +35,9 @@ export class SongService {
       throw new NotFoundException('해당 음원이 존재하지 않습니다.');
     }
     return exMusic;
+  }
+
+  async addToPlaylist(addToPlaylistRequestDto: AddToPlaylistRequestDto) {
+    // const { playlistId, songId } = await this.songRepository.addToPlaylist;
   }
 }
