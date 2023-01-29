@@ -33,4 +33,15 @@ export class FeedRepository {
       });
     }
   }
+
+  async findFeeds(userId: number) {
+    return await this.prisma.feed.findMany({
+      where: {
+        UserId: userId,
+      },
+      include: {
+        Song: true,
+      },
+    });
+  }
 }

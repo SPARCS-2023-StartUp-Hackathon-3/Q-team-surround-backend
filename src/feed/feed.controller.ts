@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Auth } from '../auth/auth.decorator';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { UserPayload } from '../common/types/user-payload.interface';
@@ -19,6 +19,11 @@ export class FeedController {
     return await this.feedService.createFeed(userId, createFeedRequestDto);
   }
 
-  // @Get()
-  // getAll;
+  @Get()
+  @Auth()
+  @ApiOperation({ summary: '내가 작성한 피드를 모두 불러옵니다' })
+  @ApiOkResponse({ description: '내가 작성한 모든 피드를 불러왔습니다.' })
+  async getAllFeed(@CurrentUser() { userId }: UserPayload) {
+    return await this.feedService.getAllFeed(userId);
+  }
 }
