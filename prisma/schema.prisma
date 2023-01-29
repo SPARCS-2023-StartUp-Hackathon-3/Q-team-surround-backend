@@ -26,6 +26,17 @@ model User {
   History History[] @relation("USER_HISTORY")
   LikedSong Song[] @relation("USER_LIKE_SONG")
   Feed Feed[] @relation("USER_FEED")
+  Follower Follow[] @relation("USER_FOLLOWER")
+  Following Follow[] @relation("USER_FOLLOWING")
+}
+
+model Follow {
+  followerId Int
+  followingId Int
+
+  Follower User @relation("USER_FOLLOWING", fields: [followerId], references: [id])
+  Following User @relation("USER_FOLLOWER", fields: [followingId], references: [id])
+  @@id([followerId, followingId])
 }
 
 model UserInfo {
