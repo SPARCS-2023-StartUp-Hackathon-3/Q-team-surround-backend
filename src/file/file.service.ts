@@ -50,7 +50,6 @@ export class FileService {
 
     const stream = this.s3.getObject(param).createReadStream();
 
-    // return new StreamableFile(stream);
-    return stream;
+    return new StreamableFile(stream);
   }
 }
