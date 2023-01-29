@@ -1,73 +1,76 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# [TEAM Q] Q-team-surround-backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+![image](https://user-images.githubusercontent.com/83271772/215302205-e8e826e1-6a2d-4a53-bb6f-4b0b06eb6467.png)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+![image](https://user-images.githubusercontent.com/83271772/215302213-76045eff-c2b1-4aae-9097-e56bb8abe1dd.png)
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Surround는 SNS 기반 음원 스트리밍 플랫폼으로, 유저가 비공식 음원을 자유롭게 업로드하고 공유할 수 있는 플랫폼입니다.
+Surround에서 재생하는 음악, 회원 등을 관리하며, 데이터 업로드 및 다운로드 등 애플리케이션의 전반적인 서비스를 제공합니다.
 
-## Installation
+다음과 같은 기능이 포함되어 있습니다.
+- 음원 업로드
+- 음원 다운로드
+- 음원 Likes
+- Likes한 음원 조회
 
+
+## 프로젝트에서 사용한 기술
+
+- Language: TypeScript
+- Server Framework: NestJS
+- ORM: Prisma
+- Database: PostgreSQL, Redis
+- Cloud: EC2, RDS, S3, Docker
+
+## Dev Server 실행 방법
+
+- git clone
+- sample.env를 참고해서 환경변수를 정의해주세요.
+- docker build -t 이미지 .
+- docker run -d -p 접속포트:컨테이너포트 --name 컨테이너이름 이미지
+
+
+
+## Production 배포 방법
+
+- EC2에서 Build.sh파일 작성
 ```bash
-$ npm install
+git clone
+sudo docker stop 컨테이너
+sudo docker rm 컨테이너
+sudo docker build -t 이미지이름 .
+sudo docker run -d -p 3000:3000 --name 컨테이너 이미지
 ```
 
-## Running the app
+## 환경 변수 및 시크릿
 
-```bash
-# development
-$ npm run start
+sample.env에도 존재
 
-# watch mode
-$ npm run start:dev
+```
+# Environment variables declared in this file are automatically made available to Prisma.
+# See the documentation for more detail: https://pris.ly/d/prisma-schema#accessing-environment-variables-from-the-schema
 
-# production mode
-$ npm run start:prod
+# Prisma supports the native connection string format for PostgreSQL, MySQL, SQLite, SQL Server, MongoDB and CockroachDB.
+# See the documentation for all the connection string options: https://pris.ly/d/connection-strings
+
+DATABASE_URL=
+JWT_ACCESS_TOKEN_SECRET=
+JWT_REFRESH_TOKEN_SECRET=
+
+# Redis config
+REDIS_HOSTNAME=
+REDIS_PORT=
+
+CLIENT_URI=
+
+AWS_BUCKET_REGION=
+
+AWS_BUCKET_NAME=
+AWS_ACCESS_KEY=
+AWS_SECRET_ACCESS_KEY=
 ```
 
-## Test
+## 기타
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+... 기타 설명이 필요한 사항들 ...
