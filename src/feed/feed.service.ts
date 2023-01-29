@@ -9,4 +9,8 @@ export class FeedService {
   async createFeed(userId: number, createFeedRequestDto: CreateFeedRequestDto) {
     return await this.feedRepository.createFeed(userId, createFeedRequestDto);
   }
+
+  async getAllFeed(userId: number) {
+    return await this.feedRepository.findFeeds(userId);
+  }
 }
