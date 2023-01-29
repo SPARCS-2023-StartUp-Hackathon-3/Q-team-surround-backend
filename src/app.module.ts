@@ -9,6 +9,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
 import { SongModule } from './song/song.module';
 import { PlaylistModule } from './playlist/playlist.module';
+import { FeedModule } from './feed/feed.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { PlaylistModule } from './playlist/playlist.module';
     UserModule,
     SongModule,
     PlaylistModule,
+    FeedModule,
   ],
   controllers: [AppController],
 })

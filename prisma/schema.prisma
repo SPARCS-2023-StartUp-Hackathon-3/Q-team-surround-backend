@@ -25,6 +25,7 @@ model User {
   Playlist Playlist[] @relation("USER_PLAYLIST")
   History History[] @relation("USER_HISTORY")
   LikedSong Song[] @relation("USER_LIKE_SONG")
+  Feed Feed[] @relation("USER_FEED")
 }
 
 model UserInfo {
@@ -87,11 +88,13 @@ model Song {
   
   UserId Int @map("user_id")
   AlbumId Int? @map("album_id")
+  FeedId Int?
   Playlist Playlist[] @relation("SONG_PLAYLIST")
   History History[] @relation("SONG_HISTORY")
   Liker User[] @relation("USER_LIKE_SONG")
 
   User User @relation("USER_SONG", fields: [UserId], references: [id])
+  Feed Feed? @relation("FEED_SONG", fields: [FeedId], references: [id])
   Album Album? @relation("ALBUM_SONG", fields: [AlbumId], references: [id])
 }
 
@@ -125,4 +128,14 @@ model History {
 
   User User @relation("USER_HISTORY", fields: [UserId], references: [id])
   Song Song @relation("SONG_HISTORY", fields: [SongId], references: [id])
+}
+
+model Feed {
+  id Int @default(autoincrement()) @id
+  content String @db.Text
+
+  UserId Int
+  Song Song[] @relation("FEED_SONG")
+
+  User User? @relation("USER_FEED", fields: [UserId], references: [id])
 }
