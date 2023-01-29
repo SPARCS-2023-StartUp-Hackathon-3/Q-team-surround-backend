@@ -62,4 +62,10 @@ export class SongRepository {
       throw new BadRequestException('유저 혹은 음원이 존재하지 않습니다.');
     }
   }
+
+  // async updateFeed(userId: number, createFeedRequestDto: CreateFeedRequestDto) {
+  //   return this.prisma.song.update({
+
+  //   })
+  // }
 }
